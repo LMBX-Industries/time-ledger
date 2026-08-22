@@ -1,5 +1,5 @@
 // This is the "Offline Engine". It saves your files to the phone's hard drive.
-const CACHE_NAME = 'time-ledger-cache-v2';
+const CACHE_NAME = 'time-ledger-cache-v2.1';
 
 // The files we want to save for offline use
 const ASSETS_TO_CACHE = [
