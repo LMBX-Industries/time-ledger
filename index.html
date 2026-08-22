@@ -234,12 +234,12 @@
         function showMessage(msg, isError = false) {
             const subMsg = document.getElementById("display-sub");
             subMsg.textContent = msg;
-            if (isError) {
-                subMsg.classList.add("text-rose-500");
-                setTimeout(() => {
-                    subMsg.classList.remove("text-rose-500");
-                    subMsg.textContent = "Ready for Native Mobile NFC Scan";
-                }, 4000);
+        function addLog(message, timeStr, logType, reason, note, hiddenFromUI = false) {
+            // Only add to the visual logs array if it's not hidden
+            if (!hiddenFromUI) {
+                visualLogs.unshift({ msg: message, time: timeStr, type: logType, reason: reason, note: note });
+                if (visualLogs.length > 20) visualLogs.pop();
+                renderVisualLogs();
             }
         }
 
@@ -417,10 +417,13 @@
                     `;
                     nfcBtn.classList.remove('bg-rose-500', 'hover:bg-rose-600', 'dark:bg-rose-600', 'dark:hover:bg-rose-700');
                     nfcBtn.classList.add('bg-slate-600', 'hover:bg-slate-700', 'dark:bg-blue-500', 'dark:hover:bg-blue-600');
-                    addLog("NFC Scanner deactivated", new Date().toLocaleTimeString(), "system", "", "");
+                    
+                    // Log to CSV but hide from UI
+                    addLog("NFC Scanner deactivated", new Date().toLocaleTimeString(), "system", "", "", true);
+                    sessionLogs.push([new Date().toLocaleString(), "System Action", "SYSTEM", "NFC Scanner deactivated", ""]);
+                    saveStateToLocal();
+                    
                     showMessage("Scanner turned off. Tap to activate.");
-                    // Note: Web NFC API currently lacks a direct .stop() or .abort() method that is universally supported.
-                    // By setting isScanning = false, we ignore any reads that come in while "off".
                     return;
                 }
 
@@ -437,9 +440,25 @@
                     nfcBtn.classList.remove('bg-slate-600', 'hover:bg-slate-700', 'dark:bg-blue-500', 'dark:hover:bg-blue-600');
                     nfcBtn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'dark:bg-rose-600', 'dark:hover:bg-rose-700');
                     
-                    addLog("Mobile NFC Scanner online", new Date().toLocaleTimeString(), "system", "", "");
+                    // Log to CSV but hide from UI
+                    addLog("Mobile NFC Scanner online", new Date().toLocaleTimeString(), "system", "", "", true);
+                    sessionLogs.push([new Date().toLocaleString(), "System Action", "SYSTEM", "Mobile NFC Scanner online", ""]);
                     saveStateToLocal();
+                    
                     showMessage("Ready to scan tags to the back of this device.");
+
+                    // Dedicated error listener for bad scans
+                    ndef.addEventListener("readingerror", () => {
+                        if (!isScanning) return;
+                        
+                        const timeStr = new Date().toLocaleTimeString();
+                        const dateStr = new Date().toLocaleString();
+                        
+                        updateUI("cooldown", "READ ERROR", "Scan failed. Hold badge steady against device.", "UNKNOWN");
+                        addLog("NFC Read Error - Please retry", timeStr, "rejected", "Hardware read failed", "Ensure badge is not moved too quickly");
+                        sessionLogs.push([dateStr, "Scan Error", "UNKNOWN", "Read Failed", "Hardware Error / Bad Tap"]);
+                        saveStateToLocal();
+                    });
 
                     ndef.addEventListener("reading", ({ serialNumber }) => {
                         if (!isScanning) return; // Ignore reads if user clicked stop
