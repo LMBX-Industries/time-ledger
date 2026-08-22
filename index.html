@@ -191,7 +191,7 @@
         </div>
         
         <div class="text-center">
-            <p class="text-xs text-slate-400 dark:text-slate-500 font-mono">v1.3 - LocalStorage Enabled</p>
+            <p class="text-xs text-slate-400 dark:text-slate-500 font-mono">v2.6 - LocalStorage Enabled</p>
         </div>
     </div>
 
@@ -213,7 +213,7 @@
         const COOLDOWN_SECONDS = 60;
         
         let userStates = JSON.parse(localStorage.getItem('timeLedgerStates')) || {}; 
-        let sessionLogs = JSON.parse(localStorage.getItem('timeLedgerLogs')) || [["Timestamp", "Action", "Badge ID", "Reason", "Note"]];
+        let sessionLogs = JSON.parse(localStorage.getItem('timeLedgerLogs')) || [["Date", "Time", "Action", "Badge ID", "Reason", "Note"]];
         let visualLogs = JSON.parse(localStorage.getItem('timeLedgerVisuals')) || [];
 
         function saveStateToLocal() {
@@ -248,13 +248,13 @@
             if (!uid) return;
 
             const now = new Date();
+            const dateStr = now.toLocaleDateString();
             const timeStr = now.toLocaleTimeString();
-            const dateStr = now.toLocaleString(); 
 
             const reasonInput = document.getElementById("reason-input");
             const noteInput = document.getElementById("note-input");
-            const reason = reasonInput.value.trim();
-            const note = noteInput.value.trim();
+            const reason = reasonInput.value.trim() ? reasonInput.value.trim() : "None";
+            const note = noteInput.value.trim() ? noteInput.value.trim() : "None";
 
             if (!userStates[uid]) {
                 userStates[uid] = { status: "CLOCKED_OUT", lastTapTime: 0 };
@@ -266,7 +266,7 @@
             if (timeDiff < COOLDOWN_SECONDS) {
                 const remaining = Math.ceil(COOLDOWN_SECONDS - timeDiff);
                 updateUI("cooldown", "TAP REJECTED", `Cooldown active (${remaining}s remaining)`, uid);
-                addLog(`Tap rejected for ${uid} (Cooldown)`, timeStr, "rejected", reason, note);
+                addLog(`Tap rejected for ${uid} (Cooldown)`, timeStr, "Rejected", uid, reason, note);
                 return;
             }
 
@@ -275,13 +275,13 @@
             if (userState.status === "CLOCKED_OUT") {
                 userState.status = "CLOCKED_IN";
                 updateUI("in", "CLOCKED IN", `Welcome back! Status updated.`, uid);
-                addLog(`Clock In verified [UID: ${uid}]`, timeStr, "clock-in", reason, note);
-                sessionLogs.push([dateStr, "Clock In", uid, `"${reason}"`, `"${note}"`]);
+                addLog(`Clock In verified [UID: ${uid}]`, timeStr, "Clock In", uid, reason, note);
+                sessionLogs.push([dateStr, timeStr, "Clock In", uid, `"${reason}"`, `"${note}"`]);
             } else {
                 userState.status = "CLOCKED_OUT";
                 updateUI("out", "CLOCKED OUT", `Shift duration logged. Have a great day!`, uid);
-                addLog(`Clock Out verified [UID: ${uid}]`, timeStr, "clock-out", reason, note);
-                sessionLogs.push([dateStr, "Clock Out", uid, `"${reason}"`, `"${note}"`]);
+                addLog(`Clock Out verified [UID: ${uid}]`, timeStr, "Clock Out", uid, reason, note);
+                sessionLogs.push([dateStr, timeStr, "Clock Out", uid, `"${reason}"`, `"${note}"`]);
             }
 
             saveStateToLocal(); 
@@ -343,15 +343,15 @@
                 const li = document.createElement("li");
                 li.className = "bg-white dark:bg-slate-800 p-3 rounded-lg text-sm flex flex-col gap-1 border border-slate-100 dark:border-slate-700/60 shadow-sm transition-colors ";
                 
-                if (log.type === "clock-in") li.classList.add("border-l-4", "border-l-emerald-500");
-                else if (log.type === "clock-out") li.classList.add("border-l-4", "border-l-rose-500");
+                if (log.type === "Clock In") li.classList.add("border-l-4", "border-l-emerald-500");
+                else if (log.type === "Clock Out") li.classList.add("border-l-4", "border-l-rose-500");
                 else li.classList.add("border-l-4", "border-l-amber-500");
 
                 let detailsHtml = "";
                 if (log.reason || log.note) {
                     detailsHtml = `<div class="mt-1 text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-2 rounded">`;
-                    if (log.reason) detailsHtml += `<p><strong class="font-medium text-slate-700 dark:text-slate-300">Reason:</strong> ${log.reason}</p>`;
-                    if (log.note) detailsHtml += `<p><strong class="font-medium text-slate-700 dark:text-slate-300">Note:</strong> ${log.note}</p>`;
+                    if (log.reason && log.reason !== "None") detailsHtml += `<p><strong class="font-medium text-slate-700 dark:text-slate-300">Reason:</strong> ${log.reason}</p>`;
+                    if (log.note && log.note !== "None") detailsHtml += `<p><strong class="font-medium text-slate-700 dark:text-slate-300">Note:</strong> ${log.note}</p>`;
                     detailsHtml += `</div>`;
                 }
 
@@ -366,8 +366,8 @@
             });
         }
 
-        function addLog(message, timeStr, logType, reason, note) {
-            visualLogs.unshift({ msg: message, time: timeStr, type: logType, reason: reason, note: note });
+        function addLog(message, timeStr, logType, uid, reason, note) {
+            visualLogs.unshift({ msg: message, time: timeStr, type: logType, uid: uid, reason: reason, note: note });
             if (visualLogs.length > 20) visualLogs.pop();
             renderVisualLogs();
         }
@@ -394,7 +394,7 @@
             const confirmClear = window.confirm("Are you sure you want to clear all saved ledger data? Ensure you have downloaded your CSV first.");
             if (confirmClear) {
                 userStates = {};
-                sessionLogs = [["Timestamp", "Action", "Badge ID", "Reason", "Note"]];
+                sessionLogs = [["Date", "Time", "Action", "Badge ID", "Reason", "Note"]];
                 visualLogs = [];
                 saveStateToLocal();
                 renderVisualLogs();
@@ -417,10 +417,7 @@
                     `;
                     nfcBtn.classList.remove('bg-rose-500', 'hover:bg-rose-600', 'dark:bg-rose-600', 'dark:hover:bg-rose-700');
                     nfcBtn.classList.add('bg-slate-600', 'hover:bg-slate-700', 'dark:bg-blue-500', 'dark:hover:bg-blue-600');
-                    addLog("NFC Scanner deactivated", new Date().toLocaleTimeString(), "system", "", "");
                     showMessage("Scanner turned off. Tap to activate.");
-                    // Note: Web NFC API currently lacks a direct .stop() or .abort() method that is universally supported.
-                    // By setting isScanning = false, we ignore any reads that come in while "off".
                     return;
                 }
 
@@ -429,7 +426,6 @@
                     await ndef.scan();
                     isScanning = true;
                     
-                    // Update button UI to show it's active and clickable to turn off
                     nfcBtn.innerHTML = `
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><path d="M18.36 6.64a9 9 0 0 1 0 12.73M21.18 3.82a13 13 0 0 1 0 16.36M15.54 9.46a5 5 0 0 1 0 5.08M12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
                         NFC Active - Tap to Stop
@@ -437,23 +433,18 @@
                     nfcBtn.classList.remove('bg-slate-600', 'hover:bg-slate-700', 'dark:bg-blue-500', 'dark:hover:bg-blue-600');
                     nfcBtn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'dark:bg-rose-600', 'dark:hover:bg-rose-700');
                     
-                    addLog("Mobile NFC Scanner online", new Date().toLocaleTimeString(), "system", "", "");
                     saveStateToLocal();
                     showMessage("Ready to scan tags to the back of this device.");
 
                     ndef.addEventListener("reading", ({ serialNumber }) => {
-                        if (!isScanning) return; // Ignore reads if user clicked stop
-                        
+                        if (!isScanning) return;
                         if (serialNumber) {
                             processBadgeTap(serialNumber);
-                        } else {
-                            addLog("NFC tag detected without accessible serial number", new Date().toLocaleTimeString(), "rejected", "", "");
                         }
                     });
                 } catch (error) {
                     isScanning = false;
                     showMessage(`NFC Error: ${error.message}`, true);
-                    addLog(`NFC Error: ${error.message}`, new Date().toLocaleTimeString(), "rejected", "", "");
                 }
             } else {
                 showMessage("Web NFC is not supported here. Secure HTTPS required.", true);
