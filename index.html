@@ -2,8 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Time Ledger Terminal</title>
+    
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Mobile Theme Color for Browser Header -->
+    <meta name="theme-color" content="#0f172a">
+    
+    <!-- Apple Touch Icon (For iOS compatibility just in case) -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -26,16 +36,16 @@
         
         .glass-card {
             background-color: #ffffff;
-            border: 1px solid #f1f5f9;
+            border: 1px solid rgba(241, 245, 249, 0.5);
             border-radius: 12px;
-            box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -4px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.1), 0 10px 20px -4px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease-in-out;
         }
 
         .dark .glass-card {
             background-color: #1e293b; 
-            border-color: rgba(255, 255, 255, 0.04); 
-            box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.35), 0 4px 12px -4px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.02); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 12px 24px -6px rgba(0, 0, 0, 0.25);
         }
 
         input[type="text"], textarea {
@@ -98,8 +108,8 @@
             transition: all 0.2s;
         }
         .dark .btn-danger-outline { color: #ef4444; border-color: #ef4444; }
-        .btn-danger-outline:hover { background-color: #fef2f2; color: #dc2626; border-color: #dc2626; }
-        .dark .btn-danger-outline:hover { background-color: #450a0a; color: #f87171; border-color: #f87171; }
+        .btn-danger-outline:hover { background-color: #fef2f2; }
+        .dark .btn-danger-outline:hover { background-color: rgba(239, 68, 68, 0.1); }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -173,13 +183,24 @@
     </div>
 
     <script>
+        // --- PWA SERVICE WORKER REGISTRATION ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registered with scope:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.error('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+        // ---------------------------------------
+
         const COOLDOWN_SECONDS = 60;
         
-        // Load persistent data from browser's Local Storage, or create defaults if empty
         let userStates = JSON.parse(localStorage.getItem('timeLedgerStates')) || {}; 
         let sessionLogs = JSON.parse(localStorage.getItem('timeLedgerLogs')) || [["Timestamp", "Action", "Badge ID", "Reason", "Note"]];
-        
-        // This array only holds logs for the visual UI so it doesn't get infinitely long on screen
         let visualLogs = JSON.parse(localStorage.getItem('timeLedgerVisuals')) || [];
 
         function saveStateToLocal() {
@@ -204,7 +225,7 @@
                 subMsg.classList.add("text-rose-500");
                 setTimeout(() => {
                     subMsg.classList.remove("text-rose-500");
-                    subMsg.textContent = "Scan using USB Reader or Native Mobile NFC";
+                    subMsg.textContent = "Ready for Native Mobile NFC Scan";
                 }, 4000);
             }
         }
@@ -250,7 +271,7 @@
                 sessionLogs.push([dateStr, "Clock Out", uid, `"${reason}"`, `"${note}"`]);
             }
 
-            saveStateToLocal(); // Immediately commit changes to hard drive / browser memory
+            saveStateToLocal(); 
 
             reasonInput.value = "";
             noteInput.value = "";
@@ -293,7 +314,7 @@
 
         function renderVisualLogs() {
             const stream = document.getElementById("log-stream");
-            stream.innerHTML = ""; // Clear existing
+            stream.innerHTML = ""; 
             
             if (visualLogs.length === 0) {
                 stream.innerHTML = `
@@ -333,7 +354,6 @@
         }
 
         function addLog(message, timeStr, logType, reason, note) {
-            // Keep visual UI log short (last 20 items max) so page doesn't lag
             visualLogs.unshift({ msg: message, time: timeStr, type: logType, reason: reason, note: note });
             if (visualLogs.length > 20) visualLogs.pop();
             renderVisualLogs();
@@ -358,7 +378,6 @@
         }
 
         function clearLedger() {
-            // Give a custom confirmation UI so they don't accidentally wipe their data
             const confirmClear = window.confirm("Are you sure you want to clear all saved ledger data? Ensure you have downloaded your CSV first.");
             if (confirmClear) {
                 userStates = {};
@@ -405,4 +424,3 @@
     </script>
 </body>
 </html>
-
