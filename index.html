@@ -332,6 +332,7 @@
         let rawPunches = JSON.parse(localStorage.getItem('timeLedgerPunches')) || [];
         let visualLogs = JSON.parse(localStorage.getItem('timeLedgerVisuals')) || [];
         let badgeDirectory = JSON.parse(localStorage.getItem('timeLedgerDirectory')) || {};
+        let pendingUnregisteredUid = null;
 
         function saveAllToLocalStorage() {
             localStorage.setItem('timeLedgerStates', JSON.stringify(userStates));
@@ -383,6 +384,61 @@
 
         function getDisplayName(uid) {
             return badgeDirectory[uid] ? badgeDirectory[uid] : uid;
+        }
+
+        function handleCardScanned(rawUid) {
+            const uid = rawUid.trim().toUpperCase();
+            if (!uid) return;
+
+            // If the directory modal is currently open, populate that form
+            if (!document.getElementById("directory-modal").classList.contains("hidden")) {
+                document.getElementById("reg-badge-uid").value = uid;
+                showMessage(`Captured UID: ${uid}`);
+                return;
+            }
+
+            // If badge is not registered in the directory, prompt for name pairing
+            if (!badgeDirectory[uid]) {
+                promptQuickRegistration(uid);
+                return;
+            }
+
+            // Otherwise, process regular clock-in/out immediately
+            processBadgeTap(uid);
+        }
+
+        function promptQuickRegistration(uid) {
+            pendingUnregisteredUid = uid;
+            document.getElementById("quick-reg-uid").value = uid;
+            const nameInput = document.getElementById("quick-reg-name");
+            nameInput.value = "";
+            document.getElementById("quick-register-modal").classList.remove("hidden");
+            setTimeout(() => nameInput.focus(), 150);
+        }
+
+        function submitQuickRegistration() {
+            const name = document.getElementById("quick-reg-name").value.trim();
+            const uid = pendingUnregisteredUid;
+
+            if (uid && name) {
+                badgeDirectory[uid] = name;
+                saveAllToLocalStorage();
+            }
+
+            document.getElementById("quick-register-modal").classList.add("hidden");
+            if (uid) {
+                processBadgeTap(uid);
+            }
+            pendingUnregisteredUid = null;
+        }
+
+        function skipQuickRegistration() {
+            const uid = pendingUnregisteredUid;
+            document.getElementById("quick-register-modal").classList.add("hidden");
+            if (uid) {
+                processBadgeTap(uid);
+            }
+            pendingUnregisteredUid = null;
         }
 
         function updateLastPunchPreview() {
@@ -792,13 +848,7 @@
                 ndef.addEventListener("reading", ({ serialNumber }) => {
                     if (!isScanning) return;
                     if (serialNumber) {
-                        const regUidInput = document.getElementById("reg-badge-uid");
-                        if (!document.getElementById("directory-modal").classList.contains("hidden")) {
-                            regUidInput.value = serialNumber.toUpperCase();
-                            showMessage(`Captured UID: ${serialNumber}`);
-                        } else {
-                            processBadgeTap(serialNumber);
-                        }
+                        handleCardScanned(serialNumber);
                     }
                 });
 
