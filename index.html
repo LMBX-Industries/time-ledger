@@ -11,7 +11,7 @@
     <!-- Mobile Theme Color for Browser Header -->
     <meta name="theme-color" content="#0f172a">
     
-    <!-- Apple Touch Icon (For iOS compatibility just in case) -->
+    <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="icon-192.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,13 +20,14 @@
             darkMode: 'class',
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; 
             color: #334155; 
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
         
         body.dark {
@@ -36,16 +37,16 @@
         
         .glass-card {
             background-color: #ffffff;
-            border: 1px solid rgba(241, 245, 249, 0.5);
-            border-radius: 12px;
-            box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.1), 0 10px 20px -4px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease-in-out;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease-in-out;
         }
 
         .dark .glass-card {
             background-color: #1e293b; 
-            border-color: rgba(255, 255, 255, 0.02); 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 12px 24px -6px rgba(0, 0, 0, 0.25);
+            border-color: rgba(255, 255, 255, 0.06); 
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.4);
         }
 
         input[type="text"], textarea {
@@ -53,7 +54,7 @@
             border: 1px solid #cbd5e1; 
             border-radius: 8px;
             color: #334155;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .dark input[type="text"], .dark textarea {
@@ -64,29 +65,29 @@
 
         input[type="text"]:focus, textarea:focus {
             outline: none;
-            border-color: #94a3b8; 
-            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.2); 
+            border-color: #64748b; 
+            box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.2); 
             background-color: #ffffff;
         }
 
         .dark input[type="text"]:focus, .dark textarea:focus {
-            border-color: #64748b; 
-            box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.3); 
+            border-color: #94a3b8; 
+            box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.25); 
             background-color: #1e293b; 
         }
 
         .btn-primary {
-            background-color: #475569; 
+            background-color: #334155; 
             color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 500;
             transition: background-color 0.2s, transform 0.1s;
         }
         
         .dark .btn-primary { background-color: #3b82f6; }
-        .btn-primary:hover:not(:disabled) { background-color: #334155; }
+        .btn-primary:hover:not(:disabled) { background-color: #1e293b; }
         .dark .btn-primary:hover:not(:disabled) { background-color: #2563eb; }
-        .btn-primary:active:not(:disabled) { transform: translateY(1px); }
+        .btn-primary:active:not(:disabled) { transform: scale(0.98); }
 
         .btn-success {
             background-color: #10b981; 
@@ -95,9 +96,21 @@
             font-weight: 500;
             transition: background-color 0.2s;
         }
-        .dark .btn-success { background-color: #059669; }
         .btn-success:hover { background-color: #059669; }
-        .dark .btn-success:hover { background-color: #047857; }
+
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #334155;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .dark .btn-secondary {
+            background-color: #334155;
+            color: #e2e8f0;
+        }
+        .btn-secondary:hover { background-color: #cbd5e1; }
+        .dark .btn-secondary:hover { background-color: #475569; }
 
         .btn-danger-outline {
             color: #ef4444;
@@ -107,91 +120,192 @@
             background: transparent;
             transition: all 0.2s;
         }
-        .dark .btn-danger-outline { color: #ef4444; border-color: #ef4444; }
-        .btn-danger-outline:hover { background-color: #fef2f2; }
-        .dark .btn-danger-outline:hover { background-color: rgba(239, 68, 68, 0.1); }
+        .btn-danger-outline:hover { background-color: rgba(239, 68, 68, 0.1); }
 
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .dark ::-webkit-scrollbar-thumb { background: #475569; }
-        .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8 flex justify-center items-start relative">
+<body class="min-h-[100dvh] flex flex-col justify-between p-3 sm:p-5 max-w-lg mx-auto select-none overflow-x-hidden">
 
-    <button onclick="toggleTheme()" class="absolute top-6 right-6 p-2.5 rounded-full bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-800 dark:hover:text-slate-100 transition-all shadow-sm z-10" title="Toggle Dark Mode">
-        <svg id="theme-icon-dark" class="w-5 h-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-            <path opacity="0.5" fill-rule="evenodd" clip-rule="evenodd" d="M22 12.0004C22 17.5232 17.5228 22.0004 12 22.0004C10.8358 22.0004 9.71801 21.8014 8.67887 21.4357C8.24138 20.3772 8 19.217 8 18.0004C8 15.7792 8.80467 13.7459 10.1384 12.1762C11.31 13.8818 13.2744 15.0004 15.5 15.0004C17.8615 15.0004 19.9289 13.741 21.0672 11.8572C21.3065 11.4612 22 11.5377 22 12.0004Z" fill="currentColor"/>
-            <path d="M2 12C2 16.3586 4.78852 20.0659 8.67887 21.4353C8.24138 20.3768 8 19.2166 8 18C8 15.7788 8.80467 13.7455 10.1384 12.1758C9.42027 11.1303 9 9.86422 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12Z" fill="currentColor"/>
-        </svg>
-        <svg id="theme-icon-light" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M12 2V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M12 21V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M22 12L21 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M3 12L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M19.0708 4.92969L18.678 5.32252" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M5.32178 18.6777L4.92894 19.0706" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M19.0708 19.0703L18.678 18.6775" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M5.32178 5.32227L4.92894 4.92943" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-    </button>
+    <!-- Top Navigation Header -->
+    <header class="flex items-center justify-between py-1 px-1 mb-2">
+        <div class="flex items-center gap-2">
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+            <h1 class="text-sm font-bold tracking-tight text-slate-800 dark:text-slate-100 uppercase">Time Ledger</h1>
+        </div>
 
-    <div class="w-full max-w-xl flex flex-col gap-6 mt-6 md:mt-2">
+        <div class="flex items-center gap-2">
+            <!-- View Toggle Button (Terminal vs Ledger) -->
+            <button id="btn-view-toggle" onclick="toggleScreenView()" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm" title="Switch View">
+                <svg id="view-icon-ledger" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                <span id="view-toggle-text">View Ledger</span>
+            </button>
+
+            <!-- Badge Directory -->
+            <button onclick="openDirectoryModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm" title="Employee Directory">
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </button>
+
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm" title="Toggle Theme">
+                <svg id="theme-icon-dark" class="w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <path opacity="0.5" fill-rule="evenodd" clip-rule="evenodd" d="M22 12.0004C22 17.5232 17.5228 22.0004 12 22.0004C10.8358 22.0004 9.71801 21.8014 8.67887 21.4357C8.24138 20.3772 8 19.217 8 18.0004C8 15.7792 8.80467 13.7459 10.1384 12.1762C11.31 13.8818 13.2744 15.0004 15.5 15.0004C17.8615 15.0004 19.9289 13.741 21.0672 11.8572C21.3065 11.4612 22 11.5377 22 12.0004Z" fill="currentColor"/>
+                    <path d="M2 12C2 16.3586 4.78852 20.0659 8.67887 21.4353C8.24138 20.3768 8 19.2166 8 18C8 15.7788 8.80467 13.7455 10.1384 12.1758C9.42027 11.1303 9 9.86422 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12Z" fill="currentColor"/>
+                </svg>
+                <svg id="theme-icon-light" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M12 2V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M12 21V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M22 12L21 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M3 12L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M19.0708 4.92969L18.678 5.32252" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M5.32178 18.6777L4.92894 19.0706" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M19.0708 19.0703L18.678 18.6775" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M5.32178 5.32227L4.92894 4.92943" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ============================================== -->
+    <!-- VIEW 1: COMPACT MAIN TERMINAL SCREEN           -->
+    <!-- ============================================== -->
+    <main id="view-terminal" class="flex-1 flex flex-col justify-between gap-3">
         
-        <div class="glass-card p-6 text-center border-t-4 border-t-slate-400 dark:border-t-slate-500 mt-8 md:mt-4" id="status-card">
-            <div class="mb-4">
-                <span id="display-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 transition-colors duration-300">
+        <!-- Live Status Card -->
+        <div class="glass-card p-4 text-center border-t-4 border-t-slate-400 dark:border-t-slate-500" id="status-card">
+            <div class="mb-2">
+                <span id="display-badge" class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 transition-colors duration-300">
                     SYSTEM READY
                 </span>
             </div>
-            <h2 id="display-msg" class="text-xl font-medium text-slate-700 dark:text-slate-100">Awaiting Badge Tap...</h2>
-            <p id="display-sub" class="text-sm text-slate-500 dark:text-slate-400 mt-2 h-5">
+            <h2 id="display-msg" class="text-lg font-semibold text-slate-800 dark:text-slate-100 truncate px-2">Awaiting Badge Tap...</h2>
+            <p id="display-sub" class="text-xs text-slate-500 dark:text-slate-400 mt-1 h-4 transition-colors">
                 Ready for Native Mobile NFC Scan
             </p>
         </div>
 
-        <div class="glass-card p-6 space-y-5">
-            <div class="space-y-4">
-                <div>
-                    <label for="reason-input" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Reason / Issue (Optional)</label>
-                    <input type="text" id="reason-input" class="w-full px-3 py-2 text-sm" placeholder="e.g., Shift start, Covering for John">
+        <!-- Optional Input Fields -->
+        <div class="glass-card p-3.5 space-y-2.5">
+            <div>
+                <label for="reason-input" class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">Reason / Shift Note (Optional)</label>
+                <input type="text" id="reason-input" class="w-full px-3 py-1.5 text-xs" placeholder="e.g. Shift start, Lunch, Covering shift">
+            </div>
+            <div>
+                <label for="note-input" class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">Additional Note (Optional)</label>
+                <input type="text" id="note-input" class="w-full px-3 py-1.5 text-xs" placeholder="e.g. Department / Machine ID notes">
+            </div>
+        </div>
+
+        <!-- Primary Action: NFC Scanner Button -->
+        <div class="w-full">
+            <button id="btn-nfc" onclick="toggleNfcScanner()" class="btn-primary w-full py-3.5 text-sm sm:text-base flex justify-center items-center gap-2 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M12 18h.01"></path><path d="M8.5 7.5a4.8 4.8 0 0 1 7 0"></path><path d="M7 10.5a7.2 7.2 0 0 1 10 0"></path></svg>
+                Activate Mobile NFC Scanner
+            </button>
+        </div>
+
+        <!-- Mini Quick-Status Bar & Recent Activity Preview -->
+        <div class="glass-card p-2.5 flex items-center justify-between text-xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors" onclick="toggleScreenView()">
+            <div class="flex items-center gap-2 overflow-hidden pr-2">
+                <span class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-500 shrink-0"></span>
+                <span id="last-punch-preview" class="text-slate-600 dark:text-slate-300 truncate">No punches recorded today</span>
+            </div>
+            <span class="text-[11px] font-semibold text-blue-600 dark:text-blue-400 shrink-0 flex items-center gap-0.5">
+                Ledger &rarr;
+            </span>
+        </div>
+    </main>
+
+    <!-- ============================================== -->
+    <!-- VIEW 2: SIMPLIFIED DAILY LEDGER SCREEN         -->
+    <!-- ============================================== -->
+    <main id="view-ledger" class="flex-1 flex flex-col justify-between gap-3 hidden">
+        <div class="glass-card flex-1 flex flex-col overflow-hidden min-h-0">
+            <!-- Header bar with summary & Back button -->
+            <div class="p-3 border-b border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleScreenView()" class="p-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Punch Ledger</h3>
+                        <p id="today-total-hours" class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">Today Total: 0h 0m</p>
+                    </div>
                 </div>
-                <div>
-                    <label for="note-input" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Note (Optional)</label>
-                    <textarea id="note-input" rows="2" class="w-full px-3 py-2 text-sm resize-none" placeholder="Additional details..."></textarea>
-                </div>
+                <span id="ledger-punch-counter" class="text-[11px] font-mono text-slate-400">0 records</span>
             </div>
 
-            <hr class="border-slate-100 dark:border-slate-700/60">
+            <!-- Scrollable Log List -->
+            <ul id="ledger-stream-list" class="flex-1 overflow-y-auto p-3 space-y-2 text-xs">
+                <!-- Dynamically populated -->
+            </ul>
 
-            <div class="space-y-3">
-                <button id="btn-nfc" onclick="startNfcScan()" class="btn-primary w-full py-4 text-base flex justify-center items-center gap-2 shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M12 18h.01"></path><path d="M8.5 7.5a4.8 4.8 0 0 1 7 0"></path><path d="M7 10.5a7.2 7.2 0 0 1 10 0"></path></svg>
-                    Activate Mobile NFC Scanner
+            <!-- Ledger Action Footer -->
+            <div class="p-2.5 border-t border-slate-100 dark:border-slate-700/60 bg-slate-50 dark:bg-slate-800/50 flex gap-2">
+                <button onclick="downloadCSV()" class="btn-success flex-1 py-2 text-xs flex items-center justify-center gap-1.5 shadow-sm">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Download CSV
+                </button>
+                <button onclick="clearLedgerPrompt()" class="btn-danger-outline px-3 py-2 text-xs" title="Clear ledger data">
+                    Clear Data
                 </button>
             </div>
         </div>
+    </main>
 
-        <div class="glass-card flex flex-col h-72">
-            <div class="p-4 border-b border-slate-100 dark:border-slate-700/60 flex justify-between items-center">
-                <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wider">Event Audit Stream</h3>
+    <!-- Footer Meta -->
+    <footer class="text-center pt-2 pb-1">
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 font-mono">Time Ledger v3.4 • PWA Terminal Engine</p>
+    </footer>
+
+    <!-- ============================================== -->
+    <!-- MODALS: BADGE DIRECTORY & CONFIRMATION         -->
+    <!-- ============================================== -->
+    <!-- Badge Directory Modal -->
+    <div id="directory-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="glass-card w-full max-w-sm p-4 space-y-3 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-700">
+                <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Badge & User Directory</h3>
+                <button onclick="closeDirectoryModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg leading-none">&times;</button>
             </div>
             
-            <ul id="log-stream" class="flex-1 overflow-y-auto p-4 space-y-2">
-                <!-- Logs injected via JS -->
-            </ul>
-            
-            <div class="p-4 border-t border-slate-100 dark:border-slate-700/60 bg-slate-50 dark:bg-slate-800/50 rounded-b-xl flex gap-3 transition-colors">
-                <button onclick="downloadCSV()" class="btn-success flex-1 py-2.5 text-sm">Download CSV</button>
-                <button onclick="clearLedger()" class="btn-danger-outline px-4 py-2.5 text-sm" title="Clear saved data">Clear Data</button>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                Pair badge hardware UIDs with employee names/IDs on this device.
+            </p>
+
+            <!-- Registration Form -->
+            <div class="space-y-2 bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60">
+                <input type="text" id="reg-badge-uid" placeholder="Badge UID (e.g. 04:34:85:02:44:22:90)" class="w-full px-2.5 py-1.5 text-xs font-mono">
+                <input type="text" id="reg-user-name" placeholder="Employee Name / ID (e.g. Alex Miller [EMP-01])" class="w-full px-2.5 py-1.5 text-xs">
+                <button onclick="saveBadgeMapping()" class="btn-primary w-full py-1.5 text-xs font-medium">Save Badge Mapping</button>
+            </div>
+
+            <!-- List of mapped badges -->
+            <div class="flex-1 overflow-y-auto space-y-1.5 pr-1 max-h-48" id="directory-list">
+                <!-- Dynamically populated -->
+            </div>
+
+            <div class="pt-2 border-t border-slate-200 dark:border-slate-700 text-right">
+                <button onclick="closeDirectoryModal()" class="btn-secondary px-3 py-1 text-xs">Close</button>
             </div>
         </div>
-        
-        <div class="text-center">
-            <p class="text-xs text-slate-400 dark:text-slate-500 font-mono">v2.6 - LocalStorage Enabled</p>
+    </div>
+
+    <!-- Clear Data In-UI Confirmation Modal (Avoids system alerts) -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="glass-card w-full max-w-xs p-4 space-y-3 text-center">
+            <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Clear Ledger Data?</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+                This will delete all stored punches on this phone. Ensure you have downloaded your CSV first.
+            </p>
+            <div class="flex gap-2 pt-2">
+                <button onclick="closeConfirmModal()" class="btn-secondary flex-1 py-1.5 text-xs">Cancel</button>
+                <button onclick="executeClearLedger()" class="bg-rose-600 hover:bg-rose-700 text-white rounded-lg flex-1 py-1.5 text-xs font-medium">Clear All</button>
+            </div>
         </div>
     </div>
 
@@ -208,18 +322,42 @@
                     });
             });
         }
-        // ---------------------------------------
 
-        const COOLDOWN_SECONDS = 60;
-        
+        // Anti-jitter debounce: 5 seconds prevents accidental duplicate reads
+        const DEBOUNCE_MS = 5000; 
+
+        // State containers
+        let currentScreen = "terminal"; // "terminal" or "ledger"
         let userStates = JSON.parse(localStorage.getItem('timeLedgerStates')) || {}; 
-        let sessionLogs = JSON.parse(localStorage.getItem('timeLedgerLogs')) || [["Date", "Time", "Action", "Badge ID", "Reason", "Note"]];
+        let rawPunches = JSON.parse(localStorage.getItem('timeLedgerPunches')) || [];
         let visualLogs = JSON.parse(localStorage.getItem('timeLedgerVisuals')) || [];
+        let badgeDirectory = JSON.parse(localStorage.getItem('timeLedgerDirectory')) || {};
 
-        function saveStateToLocal() {
+        function saveAllToLocalStorage() {
             localStorage.setItem('timeLedgerStates', JSON.stringify(userStates));
-            localStorage.setItem('timeLedgerLogs', JSON.stringify(sessionLogs));
+            localStorage.setItem('timeLedgerPunches', JSON.stringify(rawPunches));
             localStorage.setItem('timeLedgerVisuals', JSON.stringify(visualLogs));
+            localStorage.setItem('timeLedgerDirectory', JSON.stringify(badgeDirectory));
+        }
+
+        function toggleScreenView() {
+            const terminalView = document.getElementById("view-terminal");
+            const ledgerView = document.getElementById("view-ledger");
+            const toggleText = document.getElementById("view-toggle-text");
+            
+            if (currentScreen === "terminal") {
+                currentScreen = "ledger";
+                terminalView.classList.add("hidden");
+                ledgerView.classList.remove("hidden");
+                toggleText.textContent = "Terminal";
+                renderSimplifiedLedger();
+            } else {
+                currentScreen = "terminal";
+                ledgerView.classList.add("hidden");
+                terminalView.classList.remove("hidden");
+                toggleText.textContent = "View Ledger";
+                updateLastPunchPreview();
+            }
         }
 
         function toggleTheme() {
@@ -235,12 +373,26 @@
             const subMsg = document.getElementById("display-sub");
             subMsg.textContent = msg;
             if (isError) {
-                subMsg.classList.add("text-rose-500");
+                subMsg.classList.add("text-rose-500", "font-medium");
                 setTimeout(() => {
-                    subMsg.classList.remove("text-rose-500");
-                    subMsg.textContent = "Ready for Native Mobile NFC Scan";
+                    subMsg.classList.remove("text-rose-500", "font-medium");
+                    subMsg.textContent = isScanning ? "NFC Active • Tap badge to back" : "Ready for Native Mobile NFC Scan";
                 }, 4000);
             }
+        }
+
+        function getDisplayName(uid) {
+            return badgeDirectory[uid] ? badgeDirectory[uid] : uid;
+        }
+
+        function updateLastPunchPreview() {
+            const preview = document.getElementById("last-punch-preview");
+            if (rawPunches.length === 0) {
+                preview.textContent = "No punches recorded today";
+                return;
+            }
+            const last = rawPunches[rawPunches.length - 1];
+            preview.textContent = `Last: ${last.name} (${last.action} at ${last.time})`;
         }
 
         function processBadgeTap(rawUid) {
@@ -248,211 +400,420 @@
             if (!uid) return;
 
             const now = new Date();
-            const dateStr = now.toLocaleDateString();
-            const timeStr = now.toLocaleTimeString();
-
-            const reasonInput = document.getElementById("reason-input");
-            const noteInput = document.getElementById("note-input");
-            const reason = reasonInput.value.trim() ? reasonInput.value.trim() : "None";
-            const note = noteInput.value.trim() ? noteInput.value.trim() : "None";
+            const displayName = getDisplayName(uid);
 
             if (!userStates[uid]) {
                 userStates[uid] = { status: "CLOCKED_OUT", lastTapTime: 0 };
             }
 
             const userState = userStates[uid];
-            const timeDiff = (now.getTime() - userState.lastTapTime) / 1000;
+            const timeSinceLastTap = now.getTime() - userState.lastTapTime;
 
-            if (timeDiff < COOLDOWN_SECONDS) {
-                const remaining = Math.ceil(COOLDOWN_SECONDS - timeDiff);
-                updateUI("cooldown", "TAP REJECTED", `Cooldown active (${remaining}s remaining)`, uid);
-                addLog(`Tap rejected for ${uid} (Cooldown)`, timeStr, "Rejected", uid, reason, note);
+            // Anti-jitter throttle: ignore accidental instant reads within 5s
+            if (userState.lastTapTime > 0 && timeSinceLastTap < DEBOUNCE_MS) {
+                const waitSec = Math.ceil((DEBOUNCE_MS - timeSinceLastTap) / 1000);
+                showMessage(`Throttled. Hold steady and wait ${waitSec}s.`, true);
                 return;
             }
 
             userState.lastTapTime = now.getTime();
 
+            const reasonInput = document.getElementById("reason-input");
+            const noteInput = document.getElementById("note-input");
+            const reason = reasonInput.value.trim() ? reasonInput.value.trim() : "None";
+            const note = noteInput.value.trim() ? noteInput.value.trim() : "None";
+
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const dateStr = now.toLocaleDateString();
+            const timestampIso = now.toISOString();
+
             if (userState.status === "CLOCKED_OUT") {
                 userState.status = "CLOCKED_IN";
-                updateUI("in", "CLOCKED IN", `Welcome back! Status updated.`, uid);
-                addLog(`Clock In verified [UID: ${uid}]`, timeStr, "Clock In", uid, reason, note);
-                sessionLogs.push([dateStr, timeStr, "Clock In", uid, `"${reason}"`, `"${note}"`]);
+                userState.lastClockInTime = now.getTime();
+
+                updateTerminalUI("in", `CLOCKED IN: ${displayName}`, `Shift active (${timeStr})`, uid);
+                addLogEntry(`Clock In: ${displayName}`, timeStr, "Clock In", uid, reason, note);
+
+                rawPunches.push({
+                    iso: timestampIso,
+                    date: dateStr,
+                    time: timeStr,
+                    action: "Clock In",
+                    uid: uid,
+                    name: displayName,
+                    reason: reason,
+                    note: note,
+                    epoch: now.getTime()
+                });
             } else {
                 userState.status = "CLOCKED_OUT";
-                updateUI("out", "CLOCKED OUT", `Shift duration logged. Have a great day!`, uid);
-                addLog(`Clock Out verified [UID: ${uid}]`, timeStr, "Clock Out", uid, reason, note);
-                sessionLogs.push([dateStr, timeStr, "Clock Out", uid, `"${reason}"`, `"${note}"`]);
+                
+                // Calculate segment duration
+                let durationText = "";
+                if (userState.lastClockInTime) {
+                    const diffMs = now.getTime() - userState.lastClockInTime;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const hrs = Math.floor(diffMins / 60);
+                    const mins = diffMins % 60;
+                    durationText = `${hrs}h ${mins}m`;
+                }
+
+                updateTerminalUI("out", `CLOCKED OUT: ${displayName}`, `Shift logged (${durationText || "complete"})`, uid);
+                addLogEntry(`Clock Out: ${displayName} (${durationText})`, timeStr, "Clock Out", uid, reason, note);
+
+                rawPunches.push({
+                    iso: timestampIso,
+                    date: dateStr,
+                    time: timeStr,
+                    action: "Clock Out",
+                    uid: uid,
+                    name: displayName,
+                    reason: reason,
+                    note: note,
+                    epoch: now.getTime(),
+                    shiftDuration: durationText
+                });
             }
 
-            saveStateToLocal(); 
+            saveAllToLocalStorage();
+            updateLastPunchPreview();
 
+            // Clear inputs
             reasonInput.value = "";
             noteInput.value = "";
         }
 
-        function updateUI(badgeClass, mainMsg, subMsg, uid) {
+        function updateTerminalUI(badgeClass, mainMsg, subMsg, uid) {
             const badgeElem = document.getElementById("display-badge");
             const statusCard = document.getElementById("status-card");
             
-            badgeElem.className = `inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider transition-colors duration-300 `;
-            statusCard.className = `glass-card p-6 text-center border-t-4 transition-colors duration-300 `;
+            badgeElem.className = `inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-colors duration-300 `;
+            statusCard.className = `glass-card p-4 text-center border-t-4 transition-colors duration-300 `;
 
             if (badgeClass === "in") {
                 badgeElem.classList.add("bg-emerald-100", "text-emerald-700", "dark:bg-emerald-900/40", "dark:text-emerald-400");
                 statusCard.classList.add("border-t-emerald-500");
-                badgeElem.textContent = `CLOCKED IN: ${uid}`;
+                badgeElem.textContent = `STATUS: ACTIVE SHIFT`;
             } else if (badgeClass === "out") {
                 badgeElem.classList.add("bg-rose-100", "text-rose-700", "dark:bg-rose-900/40", "dark:text-rose-400");
                 statusCard.classList.add("border-t-rose-500");
-                badgeElem.textContent = `CLOCKED OUT: ${uid}`;
-            } else if (badgeClass === "cooldown") {
-                badgeElem.classList.add("bg-amber-100", "text-amber-700", "dark:bg-amber-900/40", "dark:text-amber-400");
-                statusCard.classList.add("border-t-amber-500");
-                badgeElem.textContent = "COOLDOWN";
+                badgeElem.textContent = `STATUS: CLOCKED OUT`;
             }
 
             document.getElementById("display-msg").textContent = mainMsg;
             document.getElementById("display-sub").textContent = subMsg;
             
-            if(badgeClass !== "idle") {
-                 setTimeout(() => {
-                    badgeElem.className = `inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 transition-colors duration-300`;
-                    statusCard.className = `glass-card p-6 text-center border-t-4 border-t-slate-400 dark:border-t-slate-500 transition-colors duration-300`;
-                    badgeElem.textContent = "SYSTEM READY";
-                    document.getElementById("display-msg").textContent = "Awaiting Badge Tap...";
-                    document.getElementById("display-sub").textContent = "Ready for Native Mobile NFC Scan";
-                 }, 4000);
-            }
+            setTimeout(() => {
+                badgeElem.className = `inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 transition-colors duration-300`;
+                statusCard.className = `glass-card p-4 text-center border-t-4 border-t-slate-400 dark:border-t-slate-500 transition-colors duration-300`;
+                badgeElem.textContent = "SYSTEM READY";
+                document.getElementById("display-msg").textContent = "Awaiting Badge Tap...";
+                document.getElementById("display-sub").textContent = isScanning ? "NFC Active • Tap badge to back" : "Ready for Native Mobile NFC Scan";
+            }, 3500);
         }
 
-        function renderVisualLogs() {
-            const stream = document.getElementById("log-stream");
-            stream.innerHTML = ""; 
+        function addLogEntry(message, timeStr, logType, uid, reason, note) {
+            visualLogs.unshift({ msg: message, time: timeStr, type: logType, uid: uid, reason: reason, note: note });
+            if (visualLogs.length > 50) visualLogs.pop();
+        }
+
+        function renderSimplifiedLedger() {
+            const stream = document.getElementById("ledger-stream-list");
+            const counter = document.getElementById("ledger-punch-counter");
+            const todayHoursElem = document.getElementById("today-total-hours");
             
-            if (visualLogs.length === 0) {
+            stream.innerHTML = ""; 
+            counter.textContent = `${rawPunches.length} punches`;
+
+            // Calculate Today's Total Hours
+            const todayStr = new Date().toLocaleDateString();
+            let todayMinutes = 0;
+            let openInEpoch = {};
+
+            const sorted = [...rawPunches].sort((a,b) => a.epoch - b.epoch);
+            sorted.forEach(p => {
+                if (p.date === todayStr) {
+                    if (p.action === "Clock In") {
+                        openInEpoch[p.uid] = p.epoch;
+                    } else if (p.action === "Clock Out" && openInEpoch[p.uid]) {
+                        const mins = Math.round((p.epoch - openInEpoch[p.uid]) / 60000);
+                        todayMinutes += Math.max(0, mins);
+                        delete openInEpoch[p.uid];
+                    }
+                }
+            });
+
+            const tHrs = Math.floor(todayMinutes / 60);
+            const tMins = todayMinutes % 60;
+            todayHoursElem.textContent = `Today Total: ${tHrs}h ${tMins}m`;
+
+            if (rawPunches.length === 0) {
                 stream.innerHTML = `
-                    <li class="bg-slate-50 dark:bg-slate-800/80 p-3 rounded-lg border-l-4 border-slate-300 dark:border-slate-600 text-sm flex justify-between items-center text-slate-600 dark:text-slate-400 transition-colors">
-                        <span>System Ready / Waiting for data</span> 
-                        <span class="text-xs text-slate-400 dark:text-slate-500 font-mono">--:--:--</span>
+                    <li class="bg-slate-50 dark:bg-slate-800/80 p-3 rounded-lg text-center text-slate-400">
+                        No punch records found. Clock in to begin ledger.
                     </li>
                 `;
                 return;
             }
 
-            visualLogs.forEach(log => {
+            // Display newest first
+            const displayList = [...rawPunches].reverse();
+            displayList.forEach(item => {
                 const li = document.createElement("li");
-                li.className = "bg-white dark:bg-slate-800 p-3 rounded-lg text-sm flex flex-col gap-1 border border-slate-100 dark:border-slate-700/60 shadow-sm transition-colors ";
-                
-                if (log.type === "Clock In") li.classList.add("border-l-4", "border-l-emerald-500");
-                else if (log.type === "Clock Out") li.classList.add("border-l-4", "border-l-rose-500");
-                else li.classList.add("border-l-4", "border-l-amber-500");
+                const isIn = item.action === "Clock In";
+                li.className = `p-2.5 rounded-lg border bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700/60 shadow-sm flex flex-col gap-1 ${isIn ? 'border-l-4 border-l-emerald-500' : 'border-l-4 border-l-rose-500'}`;
 
-                let detailsHtml = "";
-                if (log.reason || log.note) {
-                    detailsHtml = `<div class="mt-1 text-xs text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-2 rounded">`;
-                    if (log.reason && log.reason !== "None") detailsHtml += `<p><strong class="font-medium text-slate-700 dark:text-slate-300">Reason:</strong> ${log.reason}</p>`;
-                    if (log.note && log.note !== "None") detailsHtml += `<p><strong class="font-medium text-slate-700 dark:text-slate-300">Note:</strong> ${log.note}</p>`;
-                    detailsHtml += `</div>`;
+                let detailSub = "";
+                if (item.reason !== "None" || item.note !== "None") {
+                    detailSub = `<p class="text-[10px] text-slate-500 dark:text-slate-400 italic">${item.reason !== "None" ? 'Reason: ' + item.reason : ''} ${item.note !== "None" ? '| Note: ' + item.note : ''}</p>`;
                 }
 
                 li.innerHTML = `
-                    <div class="flex justify-between items-center text-slate-700 dark:text-slate-200">
-                        <span class="font-medium">${log.msg}</span> 
-                        <span class="text-xs text-slate-400 dark:text-slate-500 font-mono">${log.time}</span>
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold text-slate-700 dark:text-slate-200">${item.name}</span>
+                        <span class="text-[10px] font-mono text-slate-400">${item.date} ${item.time}</span>
                     </div>
-                    ${detailsHtml}
+                    <div class="flex justify-between items-center text-[11px]">
+                        <span class="font-medium ${isIn ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}">${item.action}</span>
+                        ${item.shiftDuration ? `<span class="text-slate-500 dark:text-slate-400 font-mono">${item.shiftDuration}</span>` : ''}
+                    </div>
+                    ${detailSub}
                 `;
                 stream.appendChild(li);
             });
         }
 
-        function addLog(message, timeStr, logType, uid, reason, note) {
-            visualLogs.unshift({ msg: message, time: timeStr, type: logType, uid: uid, reason: reason, note: note });
-            if (visualLogs.length > 20) visualLogs.pop();
-            renderVisualLogs();
-        }
-
         function downloadCSV() {
-            if (sessionLogs.length === 1) {
-                showMessage("No records available to download yet.", true);
+            if (rawPunches.length === 0) {
+                showMessage("No records available to export.", true);
                 return;
             }
-            
-            let csvContent = "data:text/csv;charset=utf-8," 
-                + sessionLogs.map(e => e.join(",")).join("\n");
-                
+
+            const headers = [
+                "Date",
+                "Time",
+                "Action",
+                "Employee / User ID",
+                "Badge UID",
+                "Reason",
+                "Note",
+                "Shift Duration",
+                "Daily Total Worked"
+            ];
+
+            const dailyUserTotals = {}; 
+            const rows = [];
+            const sortedPunches = [...rawPunches].sort((a, b) => a.epoch - b.epoch);
+            const userOpenClockIn = {};
+
+            sortedPunches.forEach(punch => {
+                const dateKey = punch.date;
+                const userKey = punch.uid;
+                const trackerKey = `${userKey}_${dateKey}`;
+
+                if (!dailyUserTotals[trackerKey]) {
+                    dailyUserTotals[trackerKey] = 0;
+                }
+
+                let shiftDurationFormatted = "";
+                let runningDailyTotalFormatted = "";
+
+                if (punch.action === "Clock In") {
+                    userOpenClockIn[userKey] = punch.epoch;
+                } else if (punch.action === "Clock Out") {
+                    const clockInEpoch = userOpenClockIn[userKey];
+                    if (clockInEpoch) {
+                        const elapsedMs = Math.max(0, punch.epoch - clockInEpoch);
+                        const elapsedMins = Math.round(elapsedMs / 60000);
+                        
+                        dailyUserTotals[trackerKey] += elapsedMins;
+                        
+                        const sHrs = Math.floor(elapsedMins / 60);
+                        const sMins = elapsedMins % 60;
+                        shiftDurationFormatted = `${sHrs}h ${sMins}m`;
+
+                        const totMins = dailyUserTotals[trackerKey];
+                        const tHrs = Math.floor(totMins / 60);
+                        const tMins = totMins % 60;
+                        runningDailyTotalFormatted = `${tHrs}h ${tMins}m`;
+
+                        delete userOpenClockIn[userKey];
+                    }
+                }
+
+                rows.push([
+                    punch.date,
+                    punch.time,
+                    punch.action,
+                    `"${punch.name.replace(/"/g, '""')}"`,
+                    `"${punch.uid}"`,
+                    `"${punch.reason.replace(/"/g, '""')}"`,
+                    `"${punch.note.replace(/"/g, '""')}"`,
+                    shiftDurationFormatted || "—",
+                    runningDailyTotalFormatted || "—"
+                ]);
+            });
+
+            let csvContent = "data:text/csv;charset=utf-8," + [
+                headers.join(","),
+                ...rows.map(r => r.join(","))
+            ].join("\n");
+
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Timesheet_Ledger.csv");
+            link.setAttribute("download", `Timesheet_Ledger_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        function clearLedger() {
-            const confirmClear = window.confirm("Are you sure you want to clear all saved ledger data? Ensure you have downloaded your CSV first.");
-            if (confirmClear) {
-                userStates = {};
-                sessionLogs = [["Date", "Time", "Action", "Badge ID", "Reason", "Note"]];
-                visualLogs = [];
-                saveStateToLocal();
-                renderVisualLogs();
-                showMessage("Local data cleared successfully.");
-            }
+        function clearLedgerPrompt() {
+            document.getElementById("confirm-modal").classList.remove("hidden");
         }
-        
+
+        function closeConfirmModal() {
+            document.getElementById("confirm-modal").classList.add("hidden");
+        }
+
+        function executeClearLedger() {
+            userStates = {};
+            rawPunches = [];
+            visualLogs = [];
+            saveAllToLocalStorage();
+            closeConfirmModal();
+            renderSimplifiedLedger();
+            updateLastPunchPreview();
+            showMessage("All ledger data cleared.");
+        }
+
+        function openDirectoryModal() {
+            document.getElementById("directory-modal").classList.remove("hidden");
+            renderDirectoryList();
+        }
+
+        function closeDirectoryModal() {
+            document.getElementById("directory-modal").classList.add("hidden");
+        }
+
+        function saveBadgeMapping() {
+            const uidInput = document.getElementById("reg-badge-uid");
+            const nameInput = document.getElementById("reg-user-name");
+            
+            const uid = uidInput.value.trim().toUpperCase();
+            const name = nameInput.value.trim();
+
+            if (!uid || !name) {
+                showMessage("Enter both Badge UID & Name", true);
+                return;
+            }
+
+            badgeDirectory[uid] = name;
+            saveAllToLocalStorage();
+            renderDirectoryList();
+
+            uidInput.value = "";
+            nameInput.value = "";
+        }
+
+        function deleteBadgeMapping(uid) {
+            delete badgeDirectory[uid];
+            saveAllToLocalStorage();
+            renderDirectoryList();
+        }
+
+        function renderDirectoryList() {
+            const list = document.getElementById("directory-list");
+            list.innerHTML = "";
+            const keys = Object.keys(badgeDirectory);
+
+            if (keys.length === 0) {
+                list.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-3">No mapped badges. Scan or add above.</p>`;
+                return;
+            }
+
+            keys.forEach(uid => {
+                const item = document.createElement("div");
+                item.className = "flex justify-between items-center bg-white dark:bg-slate-800 p-2 rounded border border-slate-200 dark:border-slate-700 text-xs";
+                item.innerHTML = `
+                    <div>
+                        <p class="font-semibold text-slate-800 dark:text-slate-200">${badgeDirectory[uid]}</p>
+                        <p class="font-mono text-slate-400 text-[10px]">${uid}</p>
+                    </div>
+                    <button onclick="deleteBadgeMapping('${uid}')" class="text-rose-500 hover:text-rose-700 px-1 font-semibold text-[11px]">Remove</button>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // --- NFC SCANNER ENGINE ---
         let ndef = null;
         let isScanning = false;
+        let abortController = null;
 
-        async function startNfcScan() {
+        async function toggleNfcScanner() {
             const nfcBtn = document.getElementById("btn-nfc");
-            if ("NDEFReader" in window) {
-                if (isScanning) {
-                    // Turn scanner off
-                    isScanning = false;
-                    nfcBtn.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M12 18h.01"></path><path d="M8.5 7.5a4.8 4.8 0 0 1 7 0"></path><path d="M7 10.5a7.2 7.2 0 0 1 10 0"></path></svg>
-                        Activate Mobile NFC Scanner
-                    `;
-                    nfcBtn.classList.remove('bg-rose-500', 'hover:bg-rose-600', 'dark:bg-rose-600', 'dark:hover:bg-rose-700');
-                    nfcBtn.classList.add('bg-slate-600', 'hover:bg-slate-700', 'dark:bg-blue-500', 'dark:hover:bg-blue-600');
-                    showMessage("Scanner turned off. Tap to activate.");
-                    return;
+
+            if (!("NDEFReader" in window)) {
+                showMessage("Web NFC is not supported here. Secure HTTPS required.", true);
+                return;
+            }
+
+            if (isScanning) {
+                if (abortController) {
+                    abortController.abort();
+                    abortController = null;
                 }
+                isScanning = false;
+                nfcBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M12 18h.01"></path><path d="M8.5 7.5a4.8 4.8 0 0 1 7 0"></path><path d="M7 10.5a7.2 7.2 0 0 1 10 0"></path></svg>
+                    Activate Mobile NFC Scanner
+                `;
+                nfcBtn.className = "btn-primary w-full py-3.5 text-sm sm:text-base flex justify-center items-center gap-2 shadow-md";
+                showMessage("Scanner offline. Tap to activate.");
+                return;
+            }
 
-                try {
-                    ndef = new NDEFReader();
-                    await ndef.scan();
-                    isScanning = true;
-                    
-                    nfcBtn.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><path d="M18.36 6.64a9 9 0 0 1 0 12.73M21.18 3.82a13 13 0 0 1 0 16.36M15.54 9.46a5 5 0 0 1 0 5.08M12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
-                        NFC Active - Tap to Stop
-                    `;
-                    nfcBtn.classList.remove('bg-slate-600', 'hover:bg-slate-700', 'dark:bg-blue-500', 'dark:hover:bg-blue-600');
-                    nfcBtn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'dark:bg-rose-600', 'dark:hover:bg-rose-700');
-                    
-                    saveStateToLocal();
-                    showMessage("Ready to scan tags to the back of this device.");
+            try {
+                ndef = new NDEFReader();
+                abortController = new AbortController();
 
-                    ndef.addEventListener("reading", ({ serialNumber }) => {
-                        if (!isScanning) return;
-                        if (serialNumber) {
+                await ndef.scan({ signal: abortController.signal });
+                isScanning = true;
+
+                nfcBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><path d="M18.36 6.64a9 9 0 0 1 0 12.73M21.18 3.82a13 13 0 0 1 0 16.36M15.54 9.46a5 5 0 0 1 0 5.08M12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
+                    NFC Active — Tap to Stop
+                `;
+                nfcBtn.className = "w-full py-3.5 text-sm sm:text-base flex justify-center items-center gap-2 rounded-xl font-medium shadow-md transition-all bg-rose-600 hover:bg-rose-700 text-white animate-pulse";
+                
+                showMessage("NFC Active • Tap badge to back");
+
+                ndef.addEventListener("reading", ({ serialNumber }) => {
+                    if (!isScanning) return;
+                    if (serialNumber) {
+                        const regUidInput = document.getElementById("reg-badge-uid");
+                        if (!document.getElementById("directory-modal").classList.contains("hidden")) {
+                            regUidInput.value = serialNumber.toUpperCase();
+                            showMessage(`Captured UID: ${serialNumber}`);
+                        } else {
                             processBadgeTap(serialNumber);
                         }
-                    });
-                } catch (error) {
-                    isScanning = false;
-                    showMessage(`NFC Error: ${error.message}`, true);
-                }
-            } else {
-                showMessage("Web NFC is not supported here. Secure HTTPS required.", true);
+                    }
+                });
+
+                ndef.addEventListener("readingerror", () => {
+                    showMessage("Scan reading error. Hold badge steady.", true);
+                });
+
+            } catch (error) {
+                isScanning = false;
+                showMessage(`NFC Error: ${error.message}`, true);
             }
         }
 
         window.onload = function() {
-            renderVisualLogs();
+            updateLastPunchPreview();
         };
     </script>
 </body>
