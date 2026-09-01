@@ -1,4 +1,4 @@
-const CACHE_NAME = 'time-ledger-cache-v3.5';
+const CACHE_NAME = 'time-ledger-cache-v3.6';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -11,7 +11,7 @@ const ASSETS_TO_CACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('Caching app assets v3.5');
+      console.log('Caching app assets v3.6');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
