@@ -277,11 +277,31 @@
                 Pair badge hardware UIDs with employee names/IDs on this device.
             </p>
 
-            <!-- Registration Form -->
-            <div class="space-y-2 bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700/60">
-                <input type="text" id="reg-badge-uid" placeholder="Badge UID (e.g. 04:34:85:02:44:22:90)" class="w-full px-2.5 py-1.5 text-xs font-mono">
-                <input type="text" id="reg-user-name" placeholder="Employee Name / ID (e.g. Alex Miller [EMP-01])" class="w-full px-2.5 py-1.5 text-xs">
-                <button onclick="saveBadgeMapping()" class="btn-primary w-full py-1.5 text-xs font-medium">Save Badge Mapping</button>
+            <!-- Registration Form with Integrated NFC Scan -->
+            <div class="space-y-2.5 bg-slate-50 dark:bg-slate-900/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/60">
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase text-slate-500 dark:text-slate-400 mb-1">1. Employee / User Name</label>
+                    <input type="text" id="reg-user-name" placeholder="e.g. Alex Miller [EMP-01]" class="w-full px-2.5 py-1.5 text-xs">
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-[10px] font-semibold uppercase text-slate-500 dark:text-slate-400">2. Badge UID</label>
+                        <span id="modal-scan-status" class="text-[10px] font-medium text-slate-400">Not scanned</span>
+                    </div>
+                    <div class="flex gap-1.5">
+                        <input type="text" id="reg-badge-uid" placeholder="Tap 'Scan Badge' or type UID" class="flex-1 px-2.5 py-1.5 text-xs font-mono">
+                        <button id="btn-modal-scan" onclick="startModalNfcScan()" type="button" class="px-2.5 py-1.5 text-xs font-medium rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 shrink-0 transition-all shadow-sm">
+                            <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M12 18h.01"></path><path d="M8.5 7.5a4.8 4.8 0 0 1 7 0"></path><path d="M7 10.5a7.2 7.2 0 0 1 10 0"></path></svg>
+                            <span id="btn-modal-scan-text">Scan Badge</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="saveBadgeMapping()" class="btn-primary w-full py-2 text-xs font-medium flex items-center justify-center gap-1.5 shadow-sm">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Save Badge Mapping
+                </button>
             </div>
 
             <!-- List of mapped badges -->
@@ -746,10 +766,98 @@
         function openDirectoryModal() {
             document.getElementById("directory-modal").classList.remove("hidden");
             renderDirectoryList();
+            resetModalScanUI();
         }
 
         function closeDirectoryModal() {
             document.getElementById("directory-modal").classList.add("hidden");
+            resetModalScanUI();
+        }
+
+        async function startModalNfcScan() {
+            const statusLabel = document.getElementById("modal-scan-status");
+            const btn = document.getElementById("btn-modal-scan");
+            const btnText = document.getElementById("btn-modal-scan-text");
+
+            if (!("NDEFReader" in window)) {
+                statusLabel.textContent = "NFC unsupported on this browser";
+                statusLabel.className = "text-[10px] font-medium text-rose-500";
+                return;
+            }
+
+            // If terminal scanner is already active, just inform user to tap
+            if (isScanning) {
+                statusLabel.textContent = "Scanner active • Tap card to phone back";
+                statusLabel.className = "text-[10px] font-medium text-amber-500 animate-pulse";
+                btn.className = "px-2.5 py-1.5 text-xs font-medium rounded-lg bg-amber-500 text-white flex items-center gap-1 shrink-0 animate-pulse";
+                btnText.textContent = "Listening...";
+                return;
+            }
+
+            try {
+                ndef = new NDEFReader();
+                abortController = new AbortController();
+
+                await ndef.scan({ signal: abortController.signal });
+                isScanning = true;
+
+                // Sync main terminal button state
+                const mainNfcBtn = document.getElementById("btn-nfc");
+                if (mainNfcBtn) {
+                    mainNfcBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"><path d="M18.36 6.64a9 9 0 0 1 0 12.73M21.18 3.82a13 13 0 0 1 0 16.36M15.54 9.46a5 5 0 0 1 0 5.08M12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
+                        NFC Active — Tap to Stop
+                    `;
+                    mainNfcBtn.className = "w-full py-3.5 text-sm sm:text-base flex justify-center items-center gap-2 rounded-xl font-medium shadow-md transition-all bg-rose-600 hover:bg-rose-700 text-white animate-pulse";
+                }
+
+                statusLabel.textContent = "Hold badge to back of phone...";
+                statusLabel.className = "text-[10px] font-medium text-emerald-500 animate-pulse";
+                btn.className = "px-2.5 py-1.5 text-xs font-medium rounded-lg bg-emerald-600 text-white flex items-center gap-1 shrink-0 animate-pulse";
+                btnText.textContent = "Scanning...";
+
+                ndef.addEventListener("reading", ({ serialNumber }) => {
+                    if (serialNumber) {
+                        const uid = serialNumber.trim().toUpperCase();
+                        document.getElementById("reg-badge-uid").value = uid;
+                        statusLabel.textContent = `Captured: ${uid}`;
+                        statusLabel.className = "text-[10px] font-medium text-emerald-600 dark:text-emerald-400 font-mono";
+                        btn.className = "px-2.5 py-1.5 text-xs font-medium rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 shrink-0";
+                        btnText.textContent = "Re-scan";
+                        
+                        // If user has not typed a name yet, focus the name input
+                        const nameInput = document.getElementById("reg-user-name");
+                        if (!nameInput.value.trim()) {
+                            nameInput.focus();
+                        }
+                    }
+                });
+
+                ndef.addEventListener("readingerror", () => {
+                    statusLabel.textContent = "Read error. Hold badge steady.";
+                    statusLabel.className = "text-[10px] font-medium text-rose-500";
+                });
+
+            } catch (error) {
+                statusLabel.textContent = `Error: ${error.message}`;
+                statusLabel.className = "text-[10px] font-medium text-rose-500";
+                btn.className = "px-2.5 py-1.5 text-xs font-medium rounded-lg bg-blue-600 text-white flex items-center gap-1 shrink-0";
+                btnText.textContent = "Scan Badge";
+            }
+        }
+
+        function resetModalScanUI() {
+            const statusLabel = document.getElementById("modal-scan-status");
+            const btn = document.getElementById("btn-modal-scan");
+            const btnText = document.getElementById("btn-modal-scan-text");
+            if (statusLabel) {
+                statusLabel.textContent = isScanning ? "Scanner active" : "Not scanned";
+                statusLabel.className = "text-[10px] font-medium text-slate-400";
+            }
+            if (btn && btnText) {
+                btn.className = "px-2.5 py-1.5 text-xs font-medium rounded-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1 shrink-0 transition-all shadow-sm";
+                btnText.textContent = "Scan Badge";
+            }
         }
 
         function saveBadgeMapping() {
